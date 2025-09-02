@@ -1,0 +1,10 @@
+# Ignore macOS-specific files
+.DS_Store
+
+# Ignore Python cache and virtual environment files
+pycache/
+.venv/
+env/
+
+# Ignore the synchronization script itself
+leetcode_sync.py
