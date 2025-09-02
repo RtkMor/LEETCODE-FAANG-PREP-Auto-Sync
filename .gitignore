@@ -5,6 +5,10 @@
 pycache/
 .venv/
 env/
+.env
+.last_submission_id
+__pycache__/
+*.pyc
 
 # Ignore the synchronization script itself
 leetcode_sync.py
