@@ -71,18 +71,31 @@ If you're inspired to build your own LeetCode auto-sync tool, here are the gener
 The script automatically organizes solutions into the following structure, making it easy to navigate:
 
 .
+
 ├── arrays/
+
 │   ├── easy/
+
 │   │   ├── 0001-two-sum/
+
 │   │   │   └── solution.py
+
 │   │   └── 0026-remove-duplicates-from-sorted-array/
+
 │   │       └── solution.js
+
 │   └── medium/
+
 │       └── 0015-3sum/
+
 │           └── solution.py
+
 └── strings/
+
 └── easy/
+
 └── 0020-valid-parentheses/
+
 └── solution.py
 
 ---
