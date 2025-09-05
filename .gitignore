@@ -6,7 +6,6 @@ pycache/
 .venv/
 env/
 .env
-.last_submission_id
 __pycache__/
 *.pyc
 
