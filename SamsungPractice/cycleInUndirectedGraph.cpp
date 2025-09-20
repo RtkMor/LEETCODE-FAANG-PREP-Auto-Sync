@@ -13,9 +13,17 @@ bool dfs(int node, vector<vector<int>> &adj, vector<int> &vis, int parent, vecto
             }
         } else {
             if(neighbour != parent){
-                auto it = find(path.begin(), path.end(), neighbour);
-                cycle.assign(it, path.end());
-                cycle.push_back(neighbour);
+                int k = 0;
+                for(k ; k<path.size() ; k++){
+                    if(path[k]==neighbour){
+                        break;
+                    }
+                }
+                vector<int> currCycle;
+                for(k; k<path.size() ; k++){
+                    currCycle.push_back(path[k]);
+                }
+                if(cycle.size() > currCycle.size()) cycle = currCycle;
                 return true;
             }
         }
