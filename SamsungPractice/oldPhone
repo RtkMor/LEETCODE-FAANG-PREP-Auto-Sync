@@ -1,0 +1,123 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+// This function checks if a number can be typed directly using only the available digits.
+// If it can, it returns the number of digits (touches). Otherwise, it returns INT_MAX.
+int canBeTypedDirectly(int target, const vector<bool>& is_working_digit) {
+    string s = to_string(target);
+    for (char c : s) {
+        if (!is_working_digit[c - '0']) {
+            return INT_MAX; // A required digit is broken
+        }
+    }
+    return s.length(); // Return number of touches (digits)
+}
+
+void solve(int case_num) {
+    int n, m, o, target;
+    cin >> n >> m >> o;
+
+    vector<bool> is_working_digit(10, false);
+    vector<int> working_digits(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> working_digits[i];
+        is_working_digit[working_digits[i]] = true;
+    }
+
+    vector<int> ops(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> ops[i];
+    }
+    cin >> target;
+
+    // --- Main Logic: Breadth-First Search (BFS) ---
+
+    // `min_touches[i]` stores the minimum touches to form the number `i`.
+    // Initialize all to INT_MAX to represent "not yet reached".
+    vector<int> min_touches(1000000, INT_MAX);
+    queue<int> q;
+
+    // Initial state: Push all single working digits into the queue.
+    // Each takes 1 touch to form.
+    for (int digit : working_digits) {
+        if (min_touches[digit] == INT_MAX) {
+            min_touches[digit] = 1;
+            q.push(digit);
+        }
+    }
+
+    // This is the minimum touches found so far. Initialize with the direct typing cost.
+    int ans = canBeTypedDirectly(target, is_working_digit);
+
+    while (!q.empty()) {
+        int curr_num = q.front();
+        q.pop();
+
+        int curr_touches = min_touches[curr_num];
+
+        // If we found the target, update our best answer.
+        // The +1 is for the '=' touch.
+        if (curr_num == target) {
+            ans = min(ans, curr_touches);
+        }
+
+        // Optimization: If we can't perform any more operations within the touch limit 'o',
+        // stop exploring from this path. The minimum operation takes 2 more touches (* and =).
+        if (curr_touches + 2 > o || curr_touches + 2 >= ans) {
+            continue;
+        }
+
+        // Try all operations from the current number
+        for (int op_type : ops) {
+            for (int digit : working_digits) {
+                if (digit == 0 && op_type == 4) continue; // Avoid division by zero
+
+                int next_num = -1;
+                if (op_type == 1) next_num = curr_num + digit;
+                else if (op_type == 2) next_num = curr_num - digit;
+                else if (op_type == 3) next_num = curr_num * digit;
+                else if (op_type == 4) next_num = curr_num / digit;
+
+                // Touches: current + operator + digit
+                // We don't add '=' yet, as this new number could be an intermediate result.
+                int next_touches = curr_touches + 2;
+
+                if (next_num >= 0 && next_num < 1000000 && next_touches < min_touches[next_num] && next_touches < o) {
+                    min_touches[next_num] = next_touches;
+                    q.push(next_num);
+                }
+            }
+        }
+    }
+
+    // Final answer is the best of direct typing vs. calculation.
+    // The calculation cost must include the final '=' touch.
+    if (min_touches[target] != INT_MAX && min_touches[target] < o) {
+        ans = min(ans, min_touches[target] + 1);
+    }
+    
+    cout << "#" << case_num << ": ";
+    if (ans > o) {
+        cout << -1 << "\n"; // If min touches exceeds limit, it's impossible.
+    } else {
+        cout << ans << "\n";
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    for (int i = 1; i <= t; ++i) {
+        solve(i);
+    }
+    return 0;
+}
