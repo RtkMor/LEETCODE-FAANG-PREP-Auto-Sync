@@ -21,7 +21,10 @@ bool isValid(long long num, int k, const vector<bool>& is_forbidden) {
 }
 
 void solve() {
+    // Range -> a to b
     long long a, b;
+    // Forbidden count should not be more than or equal to k
+    // n -> count of forbidden digits
     int k, n;
     cin >> a >> b >> k;
     cin >> n;
